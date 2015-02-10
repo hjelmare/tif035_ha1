@@ -1,8 +1,8 @@
 clear all
 clc
 
-rMin = 1e-3;
-rMax = 1;
+rMin = 1e-10;
+rMax = 10;
 nPoints = 1000;
 radius = linspace(rMin,rMax,nPoints);
 stepWidth = rMax/(nPoints-1);
@@ -19,16 +19,18 @@ for i = 2:nPoints
     H(i-1,i) = -.5/stepWidth^2;
 end
 
+H(1,1) = 0;
+H(1,2) = 0;
+H(end:end)=0;
+H(end:end-1)=0;
+
 [vectors, values] = eig(H);
 
-which = 2;
+values = sum(values);
+minEig = sort(values);
+minEig = minEig(2);
+minIndex = find(values == minEig);
 
-values = sort(unique(values));
-values(which)
-
-density = vectors(:,which);
-for i = 1:nPoints
-    density(i) = (density(i)/radius(i))^2 / (4*pi);
-end
-
-plot(radius,density)
+plot(vectors(:,minIndex))
+disp('Ground state energy [eV]')
+disp(minEig*27.21)
