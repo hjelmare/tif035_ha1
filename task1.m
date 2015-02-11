@@ -42,7 +42,7 @@ F = zeros(4,4);
 energyChange = 1;
 oldEnergy = 10;
 energy = 0;
-while energyChange > 1e-8
+while energyChange > 1e-5
     for p = 1:4
         for q = 1:4
             temp = 0;

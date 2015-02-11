@@ -5,7 +5,7 @@ rMin = 1e-10;
 rMax = 10;
 nPoints = 1000;
 radius = linspace(rMin,rMax,nPoints);
-stepWidth = rMax/(nPoints-1);
+stepWidth = (rMax-rMin)/(nPoints-1);
 
 H = zeros(nPoints);
 % Diagonal
@@ -27,10 +27,11 @@ H(end:end-1)=0;
 [vectors, values] = eig(H);
 
 values = sum(values);
-minEig = sort(values);
-minEig = minEig(2);
-minIndex = find(values == minEig);
+gsEig = sort(values);
+gsEig = gsEig(2);
+gsIndex = find(values == gsEig);
+gsWave = vectors(:,gsIndex);
 
-plot(vectors(:,minIndex))
+plot(radius, gsWave)
 disp('Ground state energy [eV]')
-disp(minEig*27.21)
+disp(gsEig*27.21)

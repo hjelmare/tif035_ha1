@@ -4,7 +4,6 @@ clf
 
 nPoints = 1000;
 rMax = 10;
-a0 = 0.529;     % ångström??
 a0 = 1;
 
 nIterations = 500000;
@@ -33,21 +32,28 @@ disp('Checking normalization - should be 1')
 4*pi*trapz(n.*radius.*radius)*stepWidth
 
 % Relaxation
-U = zeros(1,nPoints);
+U = zeros(nPoints);
+u = zeros(nPoints,1);
 
-U(1) = 0;
-U(end) = 0;
-
-for i = 1:nIterations
-    for ri = 1+1 : nPoints - 1
-        U(ri) = (1/2)*(4*pi*radius(ri)*n(ri)*stepWidth^2 + U(ri+1) + U(ri-1));
-    end
+for i = 1:nPoints
+    U(i,i) = 2;
 end
+for i = 2:nPoints
+    U(i-1,i) = -1;
+    U(i,i-1) = -1;
+end
+% FUCKING MAGIC, HOW DOES THIS WORK? ;)
+%U(1,1) = 0;
+U(1,2) = 0;
+%U(end:end) = 0;
+U(end:end-1) = 0;
+u = U\(4*pi*radius.*n.*stepWidth^2)';
+    
 
 % Translating back to reality
 V = zeros(1,nPoints);
 for ri = 1:nPoints
-    V(ri) = U(ri)/radius(ri) + 1/rMax;
+    V(ri) = u(ri)/radius(ri) + 1/rMax;
 end
 
 % For reference / testing
@@ -59,7 +65,7 @@ end
 
 % Plotting
 hold on
-plot(radius,V)
+plot(radius,V,'x')
 plot(radius,V_hartree, 'r')
 plot(radius,n,'k')
 hold off

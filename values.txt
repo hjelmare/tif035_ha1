@@ -1,0 +1,2 @@
+at nPoints = 5000, rMax = 15, rMin = 1e-10
+we get energy = -1.393869, peak = 0.0563306
