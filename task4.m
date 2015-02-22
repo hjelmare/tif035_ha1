@@ -51,6 +51,7 @@ while abs(oldEnergy - gsEig) > tolerance
     V_sH = zeros(1,nPoints);
     for ri = 1:nPoints
         V_sH(ri) = -2*u(ri)/radius(ri) + 1/rMax;   % THIS IS WHERE EXCHANGE HAPPENS??
+        V_sH(ri) = -u(ri)/radius(ri) + 1/rMax;      % not sure about 2*
     end
 
     % Solve Kohn-Sham (task 3 + extension)
@@ -68,16 +69,17 @@ while abs(oldEnergy - gsEig) > tolerance
 
     H(1,1) = 1;
     H(1,2) = 0;
-    H(end:end)=1;
-    H(end:end-1)=0;
-
+    H(end,end)=1;
+    H(end,end-1)=0;
+    
     [vectors, values] = eig(H);
 
     oldEnergy = gsEig;
     
     values = sum(values);
     gsEig = sort(values);
-    gsEig = gsEig(2);   % We get one supernegative eig, which we ignore 
+    gsEig(1:10)'
+    gsEig = gsEig(1);
     gsIndex = find(values == gsEig);
     gsWave = vectors(:,gsIndex);
     
