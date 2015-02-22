@@ -34,23 +34,23 @@ while abs(oldEnergy - gsEig) > tolerance
     u = zeros(nPoints,1);
     
     for i = 1:nPoints
-        U(i,i) = 2;
+        U(i,i) = -2;
     end
     for i = 2:nPoints
-        U(i-1,i) = -1;
-        U(i,i-1) = -1;
+        U(i-1,i) = 1;
+        U(i,i-1) = 1;
     end
     % FUCKING MAGIC, HOW DOES THIS WORK? ;)
-    %U(1,1) = 0;
+    U(1,1) = 1;
     U(1,2) = 0;
-    %U(end:end) = 0;
+    U(end:end) = 1;
     U(end:end-1) = 0;
     u = U\(4*pi*radius.*n.*stepWidth^2)';
 
     % Translating back to reality
     V_sH = zeros(1,nPoints);
     for ri = 1:nPoints
-        V_sH(ri) = 2*u(ri)/radius(ri) + 1/rMax;   % THIS IS WHERE EXCHANGE HAPPENS??
+        V_sH(ri) = -2*u(ri)/radius(ri) + 1/rMax;   % THIS IS WHERE EXCHANGE HAPPENS??
     end
 
     % Solve Kohn-Sham (task 3 + extension)
@@ -93,10 +93,9 @@ while abs(oldEnergy - gsEig) > tolerance
     % Normalization - NOT SURE THIS IS VERY CLEVERLY DONE RIGHT NOW
     prefactor = 1/norm;
     n = prefactor*n;
-    norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
-    
+        
     plot(radius,abs(gsWave)./radius')
     drawnow
 end
 
-disp('Done')
+disp('Done :/')

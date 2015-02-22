@@ -36,16 +36,16 @@ U = zeros(nPoints);
 u = zeros(nPoints,1);
 
 for i = 1:nPoints
-    U(i,i) = 2;
+    U(i,i) = -2;
 end
 for i = 2:nPoints
-    U(i-1,i) = -1;
-    U(i,i-1) = -1;
+    U(i-1,i) = 1;
+    U(i,i-1) = 1;
 end
 % FUCKING MAGIC, HOW DOES THIS WORK? ;)
-%U(1,1) = 0;
+U(1,1) = 1;
 U(1,2) = 0;
-%U(end:end) = 0;
+U(end:end) = 1;
 U(end:end-1) = 0;
 u = U\(4*pi*radius.*n.*stepWidth^2)';
 
@@ -53,7 +53,7 @@ u = U\(4*pi*radius.*n.*stepWidth^2)';
 % Translating back to reality
 V = zeros(1,nPoints);
 for ri = 1:nPoints
-    V(ri) = u(ri)/radius(ri) + 1/rMax;
+    V(ri) = -u(ri)/radius(ri) + 1/rMax;
 end
 
 % For reference / testing
