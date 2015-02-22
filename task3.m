@@ -19,19 +19,20 @@ for i = 2:nPoints
     H(i-1,i) = -.5/stepWidth^2;
 end
 
-H(1,1) = 0;
+H(1,1) = 1;
 H(1,2) = 0;
-H(end:end)=0;
+H(end:end)=1;
 H(end:end-1)=0;
 
 [vectors, values] = eig(H);
 
 values = sum(values);
 gsEig = sort(values);
+disp(gsEig(1:5)*27.21)
 gsEig = gsEig(2);
 gsIndex = find(values == gsEig);
 gsWave = vectors(:,gsIndex);
 
-plot(radius, gsWave)
+plot(radius, abs(gsWave)./(sqrt(4*pi)*radius'))
 disp('Ground state energy [eV]')
 disp(gsEig*27.21)

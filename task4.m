@@ -10,10 +10,8 @@ clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
 nPoints = 1000;
 rMin = 1e-10;
-rMax = 10;
+rMax = 5;
 a0 = 1;
-
-nIterations = 500000;
 
 stepWidth = (rMax-rMin) / (nPoints-1);
 
@@ -24,7 +22,7 @@ for ri = 1:nPoints
     n(ri) = phi(radius(ri))^2;
 end
 
-tolerance = 1e-5;
+tolerance = 1e-3;
 oldEnergy = 1;
 gsEig = 2;
 
@@ -68,9 +66,9 @@ while abs(oldEnergy - gsEig) > tolerance
         H(i-1,i) = -.5/stepWidth^2;
     end
 
-    H(1,1) = 0;
+    H(1,1) = 1;
     H(1,2) = 0;
-    H(end:end)=0;
+    H(end:end)=1;
     H(end:end-1)=0;
 
     [vectors, values] = eig(H);
@@ -79,22 +77,25 @@ while abs(oldEnergy - gsEig) > tolerance
     
     values = sum(values);
     gsEig = sort(values);
-    gsEig = gsEig(2);   % We get one supernegative eig, which we ignore
+    gsEig = gsEig(2);   % We get one supernegative eig, which we ignore 
     gsIndex = find(values == gsEig);
     gsWave = vectors(:,gsIndex);
     
     for ri = 1:nPoints
-        n(ri) = radius(ri)^2*gsWave(ri)^2;    % PURE GUESSWORK (CHECK IT)
+        n(ri) = gsWave(ri)^2;
     end
     % Checking/debugging inf
-    disp('   Norm check         | energy             | peak of wf ')
-    disp([4*pi*trapz(n.*radius.*radius)*stepWidth, gsEig, max(abs(gsWave))])
+    disp('   Norm check         | energy             | peak of wf         | proper energy')
+    norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
+    peak = max(abs(gsWave));
+    disp([norm, gsEig, peak])
     
-    % Normalization
-    prefactor = 1/( 4*pi*trapz(n.*radius.*radius)*stepWidth );
+    % Normalization - NOT SURE THIS IS VERY CLEVERLY DONE RIGHT NOW
+    prefactor = 1/norm;
     n = prefactor*n;
+    norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
     
-    plot(radius,abs(gsWave))
+    plot(radius,abs(gsWave)./radius')
     drawnow
 end
 

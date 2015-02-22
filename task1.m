@@ -42,7 +42,7 @@ F = zeros(4,4);
 energyChange = 1;
 oldEnergy = 10;
 energy = 0;
-while energyChange > 1e-5
+while energyChange > 1e-6
     for p = 1:4
         for q = 1:4
             temp = 0;
@@ -85,7 +85,7 @@ energy
 % Plotting stuff
 
 nPoints = 1000;
-rMax = 2;
+rMax = 5;
 radius = linspace(0,rMax,nPoints);
 
 chi = @(rad) [exp(-a(1)*rad^2), exp(-a(2)*rad^2), exp(-a(3)*rad^2), exp(-a(4)*rad^2) ];
