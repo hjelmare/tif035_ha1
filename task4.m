@@ -10,7 +10,7 @@ clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
 hartreeToEV = 27.21;
 
-nPoints = 1000;
+nPoints = 2000;
 rMin = 1e-10;
 rMax = 5;
 a0 = 1;
@@ -68,11 +68,11 @@ while abs(oldEnergy - properEnergy) > tolerance
         H(i,i-1) = -.5/stepWidth^2;
         H(i-1,i) = -.5/stepWidth^2;
     end
-
+    % MINUS ETTOR WAAAT
     H(1,1) = 1;
-    H(1,2) = 0;
+    H(1,2) = -0.00001;
     H(end,end)=1;
-    H(end,end-1)=0;
+    H(end,end-1)=-0.00001;
     
     [vectors, values] = eig(H);
 
@@ -95,7 +95,7 @@ while abs(oldEnergy - properEnergy) > tolerance
     properEnergy = 2*gsEig - trapz(V_sH'.*u.^2)*stepWidth;
     disp([norm, gsEig, peak, properEnergy])
     
-    % Normalization - NOT SURE THIS IS VERY CLEVERLY DONE RIGHT NOW
+    % Normalization
     prefactor = 1/norm;
     n = prefactor*n;
         
