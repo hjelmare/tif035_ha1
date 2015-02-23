@@ -23,4 +23,5 @@ de_c = gamma*(beta1*(1/n)^(7/6)/(2*2^(1/3)*3^(5/6)*pi^(1/6)) + beta2*(1/n)^(4/3)
     
 %om r_s < 1
 e_c = A*ln((3/(4*pi*x))^(1/3)) + B + C*(3/(4*pi*x))^(1/3)*ln((3/(4*pi*x))^(1/3)) + D*(3/(4*pi*x))^(1/3);
-de_c = DU HAR SKRIVIT NER VAD DET SKA VARA I DITT BLOCK!!!!!!!1
+de_c = -(6^(2/3)*pi^(1/3)*A + (1/n)^(1/3)*(C*(log(1/n) + 3 - log(pi) + log(3) - 2*log(2)) + 3*D) )...
+    /(3*6^(2/3)*pi^(1/3)*n);
