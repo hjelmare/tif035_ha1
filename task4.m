@@ -10,9 +10,9 @@ clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
 hartreeToEV = 27.21;
 
-nPoints = 2000;
+nPoints = 1000;
 rMin = 1e-10;
-rMax = 5;
+rMax = 50;
 a0 = 1;
 
 stepWidth = (rMax-rMin) / (nPoints-1);
@@ -48,7 +48,7 @@ while abs(oldEnergy - properEnergy) > tolerance
     U(end:end) = 1;
     U(end:end-1) = 0;
     u = U\(4*pi*radius.*n.*stepWidth^2)';
-
+    
     % Translating back to reality
     V_sH = zeros(1,nPoints);
     for ri = 1:nPoints
@@ -86,7 +86,7 @@ while abs(oldEnergy - properEnergy) > tolerance
     for ri = 1:nPoints
         n(ri) = gsWave(ri)^2;
     end
-    
+        
     oldEnergy = properEnergy;
     % Checking/debugging inf
     disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
@@ -94,14 +94,16 @@ while abs(oldEnergy - properEnergy) > tolerance
     peak = max(abs(gsWave));
     properEnergy = 2*gsEig - trapz(V_sH'.*u.^2)*stepWidth;
     disp([norm, gsEig, peak, properEnergy])
-    
+        
     % Normalization
     prefactor = 1/norm;
     n = prefactor*n;
         
-    plot(radius,abs(gsWave)./radius')
+    %plot(radius,abs(gsWave)./radius')
+    plot(radius,u.^2 ./ radius.^2 ,'r',radius,4*pi*n,'b')
     drawnow
 end
 
 disp('Final energy')
 disp(properEnergy)
+disp(stepWidth*[trapz(V_sH), trapz(u.^2)])
