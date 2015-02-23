@@ -57,11 +57,11 @@ while abs(oldEnergy - gsEig) > tolerance
 
     %---------------------------Ända skillnaden från task4---------------
     %Calculates V_c (eq 22-24)
-    V_c = zeros(1,nPoints);
+    V_x = zeros(1,nPoints);
     for ri = 1:nPoints
     e_x = -3/4*(3*n(ri)/pi)^(1/3);
-    de_x = -3*n(ri)/(4*pi)*(pi/(3*n(ri)))^(2/3);
-    V_c(i) = e_x + de_x;
+    de_x = -3/(4*pi)*(pi/(3*n(ri)))^(2/3);
+    V_x(i) = e_x + n(ri)*de_x;
     end
     %--------------------------------------------------------------------
     
@@ -69,7 +69,7 @@ while abs(oldEnergy - gsEig) > tolerance
     H = zeros(nPoints);
     % Diagonal
     for i = 1:nPoints
-        H(i,i) = 1/stepWidth^2 - 2/radius(i) + V_sH(i) + V_c(i);    % POTS GO HERE
+        H(i,i) = 1/stepWidth^2 - 2/radius(i) + V_sH(i) + V_x(i);    % POTS GO HERE
     end
 
     % Sub- and superdiagonals
