@@ -69,7 +69,7 @@ while abs(oldEnergy - gsEig) > tolerance
     H = zeros(nPoints);
     % Diagonal
     for i = 1:nPoints
-        H(i,i) = 1/stepWidth^2 - 2/radius(i) + V_sH(i) + V_x(i);    % POTS GO HERE
+        H(i,i) = 1/stepWidth^2 - 2/radius(i) + 2*V_sH(i) + V_x(i);    % POTS GO HERE
     end
 
     % Sub- and superdiagonals
