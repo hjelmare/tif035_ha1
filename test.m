@@ -48,7 +48,19 @@ while abs(oldEnergy - properEnergy) > tolerance
     U(1,2) = 0;
     U(end,end) = 1;
     U(end,end-1) = 0;
+    
+    % Normalization
+    norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
+    prefactor = 1/norm;
+    n = prefactor*n;
+    
     u = U\(4*pi*radius.*n.*stepWidth^2)';
+    
+%     %---------------NYTT----------------
+%     norm1 = trapz(u.^2)*stepWidth;
+%     u = u*(1/norm1);
+%     aaaaa = trapz(u.^2)*stepWidth
+%     %-----------------------------------
 
     % Translating back to reality
     V_sH = zeros(1,nPoints);

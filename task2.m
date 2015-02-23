@@ -48,7 +48,7 @@ U(1,2) = 0;
 U(end:end) = 1;
 U(end:end-1) = 0;
 u = U\(4*pi*radius.*n.*stepWidth^2)';
-
+a=trapz(u.^2)*stepWidth
 
 % Translating back to reality
 V = zeros(1,nPoints);
