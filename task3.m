@@ -3,6 +3,7 @@ clc
 
 rMin = 1e-10;
 rMax = 5;
+
 nPoints = 1000;
 radius = linspace(rMin,rMax,nPoints);
 stepWidth = (rMax-rMin)/(nPoints-1);
@@ -27,9 +28,7 @@ H(end,end-1)=0;
 [vectors, values] = eig(H);
 
 values = sum(values);
-gsEig = sort(values);
-disp(gsEig(1:5)*27.21)
-gsEig = gsEig(1);
+gsEig = min(values);
 gsIndex = find(values == gsEig);
 gsWave = vectors(:,gsIndex);
 
