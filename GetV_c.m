@@ -1,4 +1,4 @@
-function [ V_c ] = GetV_c( density )
+function [ V_c, e_c ] = GetV_c( density )
 %Calculates the correlation part of the potential. requires the density (n)
 %and returns the correlation potential. These calculations are based on 
 % eq(22 - 27) in the task paper. 
@@ -36,19 +36,19 @@ constant3 = D*constant1;
 %----------------------------------------
 
 V_c = zeros(1, width);
+e_c = zeros(1, width);
 for i = 1:width
     r_s = (3/(4*pi*density(i)))^(1/3);
     
     if r_s >=1
-        disp('den blev mer än 1-------------------------')
-        e_c = gamma/(1 + n1*(1/density(i))^(1/6) + n2*(1/density(i))^(1/3));
+        e_c(i) = gamma/(1 + n1*(1/density(i))^(1/6) + n2*(1/density(i))^(1/3));
         
         de_c = gamma*(dt1*(1/density(i))^(7/6) + dt2*(1/density(i))^(4/3) )...
             /(dn1*(1/density(i))^(1/6) + dn2*(1/density(i))^(1/3) + 1);
         
         V_c(i) = e_c + density(i)*de_c;
     else
-        e_c = A*log(constant1*(1/density(i))^(1/3)) + B + constant2*...
+        e_c(i) = A*log(constant1*(1/density(i))^(1/3)) + B + constant2*...
             log(constant1*(1/density(i))^(1/3)) + constant3*(1/density(i))^(1/3);
         
         de_c = -(dT1 + (1/density(i))^(1/3)*(C*(log(1/density(i)) + dT2) + 3*D)...

@@ -1,6 +1,3 @@
-%Exactly the same as task5 except new thing on line....
-
-%Samma som task4 fast med en extra term 
 clear all
 clc
 
@@ -10,6 +7,8 @@ task1
 % and clean up stuff we won't need
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
+
+hartreeToEV = 27.21;
 
 nPoints = 1000;
 rMin = 1e-10;
@@ -27,9 +26,9 @@ end
 
 tolerance = 1e-3;
 oldEnergy = 1;
-gsEig = 2;
+properEnergy = 2;
 
-while abs(oldEnergy - gsEig) > tolerance
+while abs(oldEnergy - properEnergy) > tolerance
     % Find Hartree potential (and Vxc) (task 2 + extension)
     
     % Relaxation
@@ -56,17 +55,20 @@ while abs(oldEnergy - gsEig) > tolerance
         %V_sH(ri) = -2*u(ri)/radius(ri) + 1/rMax;   % THIS IS WHERE EXCHANGE HAPPENS??
         V_sH(ri) = -u(ri)/radius(ri) + 1/rMax;      % not sure about 2*
     end
-
+    
+    %---------------------------Enda skillnaden från task4---------------
     %Calculates V_c (eq 22-24)
     V_x = zeros(1,nPoints);
+    e_x = zeros(1,nPoints);
     for ri = 1:nPoints
-    e_x = -3/4*(3*n(ri)/pi)^(1/3);
-    de_x = -3*n(ri)/(4*pi)*(pi/(3*n(ri)))^(2/3);
-    V_x(i) = e_x + de_x;
+        e_x(ri) = -3/4*(3*n(ri)/pi)^(1/3);
+        de_x = -3/(4*pi)*(pi/(3*n(ri)))^(2/3);
+        V_x(ri) = e_x(ri) + n(ri)*de_x;
     end
-    
+    %--------------------------------------------------------------------
+
     %--------------------new from task5-------------------
-    V_c = GetV_c(n);
+    [V_c, e_c] = GetV_c(n);
     %-----------------------------------------------------
     
     % Solve Kohn-Sham (task 3 + extension)
@@ -81,30 +83,30 @@ while abs(oldEnergy - gsEig) > tolerance
         H(i,i-1) = -.5/stepWidth^2;
         H(i-1,i) = -.5/stepWidth^2;
     end
-
+    % TILLFÄLLIGT TILLAGDA MINUS ETT OCH SÅ
     H(1,1) = 1;
-    H(1,2) = 0;
+    H(1,2) = -0.00001;
     H(end,end)=1;
-    H(end,end-1)=0;
+    H(end,end-1)=-0.00001;
     
     [vectors, values] = eig(H);
 
-    oldEnergy = gsEig;
-    
     values = sum(values);
-    gsEig = sort(values);
-    gsEig = gsEig(1);
+    gsEig = min(values);
     gsIndex = find(values == gsEig);
     gsWave = vectors(:,gsIndex);
     
     for ri = 1:nPoints
         n(ri) = gsWave(ri)^2;
     end
+    
+    oldEnergy = properEnergy;
     % Checking/debugging inf
-    disp('   Norm check         | energy             | peak of wf         | proper energy')
+    disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
     norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
     peak = max(abs(gsWave));
-    disp([norm, gsEig, peak])
+    properEnergy = 2*gsEig - trapz((V_sH +2*V_x + 2*V_c - 2*e_x )'.*u.^2)*stepWidth;
+    disp([norm, gsEig, peak, properEnergy])
     
     % Normalization - NOT SURE THIS IS VERY CLEVERLY DONE RIGHT NOW
     prefactor = 1/norm;
@@ -114,4 +116,9 @@ while abs(oldEnergy - gsEig) > tolerance
     drawnow
 end
 
-disp('Done :/')
+disp('Final energy')
+disp(properEnergy)
+
+
+
+

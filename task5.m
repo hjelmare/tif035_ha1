@@ -59,10 +59,11 @@ while abs(oldEnergy - properEnergy) > tolerance
     %---------------------------Enda skillnaden från task4---------------
     %Calculates V_c (eq 22-24)
     V_x = zeros(1,nPoints);
+    e_x = zeros(1,nPoints);
     for ri = 1:nPoints
-        e_x = -3/4*(3*n(ri)/pi)^(1/3);
+        e_x(ri) = -3/4*(3*n(ri)/pi)^(1/3);
         de_x = -3/(4*pi)*(pi/(3*n(ri)))^(2/3);
-        V_x(ri) = e_x + n(ri)*de_x;
+        V_x(ri) = e_x(ri) + n(ri)*de_x;
     end
     %--------------------------------------------------------------------
     
@@ -78,11 +79,11 @@ while abs(oldEnergy - properEnergy) > tolerance
         H(i,i-1) = -.5/stepWidth^2;
         H(i-1,i) = -.5/stepWidth^2;
     end
-
+    % TILLFÄLLIGT TILLAGDA MINUS ETT OCH SÅ
     H(1,1) = 1;
-    H(1,2) = 0;
+    H(1,2) = -0.00001;
     H(end,end)=1;
-    H(end,end-1)=0;
+    H(end,end-1)=-0.00001;
     
     [vectors, values] = eig(H);
 
@@ -100,7 +101,7 @@ while abs(oldEnergy - properEnergy) > tolerance
     disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
     norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
     peak = max(abs(gsWave));
-    properEnergy = 2*gsEig - trapz((V_sH +2*V_x)'.*u.^2)*stepWidth;
+    properEnergy = 2*gsEig - trapz((V_sH +2*V_x - 2*e_x )'.*u.^2)*stepWidth;
     disp([norm, gsEig, peak, properEnergy])
     
     % Normalization - NOT SURE THIS IS VERY CLEVERLY DONE RIGHT NOW
