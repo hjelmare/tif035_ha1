@@ -40,7 +40,6 @@ for i = 1:width
     r_s = (3/(4*pi*density(i)))^(1/3);
     
     if r_s >=1
-        disp('den blev mer än 1-------------------------')
         e_c = gamma/(1 + n1*(1/density(i))^(1/6) + n2*(1/density(i))^(1/3));
         
         de_c = gamma*(dt1*(1/density(i))^(7/6) + dt2*(1/density(i))^(4/3) )...
@@ -48,6 +47,7 @@ for i = 1:width
         
         V_c(i) = e_c + density(i)*de_c;
     else
+        disp('b')
         e_c = A*log(constant1*(1/density(i))^(1/3)) + B + constant2*...
             log(constant1*(1/density(i))^(1/3)) + constant3*(1/density(i))^(1/3);
         
