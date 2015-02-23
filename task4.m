@@ -8,6 +8,8 @@ task1
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
+hartreeToEV = 27.21;
+
 nPoints = 1000;
 rMin = 1e-10;
 rMax = 5;
@@ -26,7 +28,7 @@ tolerance = 1e-3;
 oldEnergy = 1;
 gsEig = 2;
 
-while abs(oldEnergy - gsEig) > tolerance
+while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
     % Find Hartree potential (and Vxc) (task 2 + extension)
     
     % Relaxation
@@ -50,7 +52,7 @@ while abs(oldEnergy - gsEig) > tolerance
     % Translating back to reality
     V_sH = zeros(1,nPoints);
     for ri = 1:nPoints
-        V_sH(ri) = -2*u(ri)/radius(ri) + 1/rMax;   % THIS IS WHERE EXCHANGE HAPPENS??
+        %V_sH(ri) = -2*u(ri)/radius(ri) + 1/rMax;   % THIS IS WHERE EXCHANGE HAPPENS??
         V_sH(ri) = -u(ri)/radius(ri) + 1/rMax;      % not sure about 2*
     end
 
@@ -77,9 +79,7 @@ while abs(oldEnergy - gsEig) > tolerance
     oldEnergy = gsEig;
     
     values = sum(values);
-    gsEig = sort(values);
-    gsEig(1:10)'
-    gsEig = gsEig(1);
+    gsEig = min(values);
     gsIndex = find(values == gsEig);
     gsWave = vectors(:,gsIndex);
     
@@ -101,3 +101,4 @@ while abs(oldEnergy - gsEig) > tolerance
 end
 
 disp('Done :/')
+hartreeToEV*gsEig
