@@ -46,7 +46,7 @@ for i = 1:width
         de_c = gamma*(dt1*(1/density(i))^(7/6) + dt2*(1/density(i))^(4/3) )...
             /(dn1*(1/density(i))^(1/6) + dn2*(1/density(i))^(1/3) + 1);
         
-        V_c(i) = e_c + density(i)*de_c;
+        V_c(i) = e_c(i) + density(i)*de_c;
     else
         e_c(i) = A*log(constant1*(1/density(i))^(1/3)) + B + constant2*...
             log(constant1*(1/density(i))^(1/3)) + constant3*(1/density(i))^(1/3);
@@ -54,7 +54,7 @@ for i = 1:width
         de_c = -(dT1 + (1/density(i))^(1/3)*(C*(log(1/density(i)) + dT2) + 3*D)...
             )/(dN1*density(i));
         
-        V_c(i) = e_c + density(i)*de_c; 
+        V_c(i) = e_c(i) + density(i)*de_c; 
     end
 end
 

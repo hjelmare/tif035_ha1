@@ -105,7 +105,7 @@ while abs(oldEnergy - properEnergy) > tolerance
     disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
     norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
     peak = max(abs(gsWave));
-    properEnergy = 2*gsEig - trapz((V_sH +2*V_x + 2*V_c - 2*e_x )'.*u.^2)*stepWidth;
+    properEnergy = 2*gsEig - trapz((V_sH +2*V_x + 2*V_c - 2*e_x - 2*e_c)'.*u.^2)*stepWidth;
     disp([norm, gsEig, peak, properEnergy])
     
     % Normalization - NOT SURE THIS IS VERY CLEVERLY DONE RIGHT NOW
