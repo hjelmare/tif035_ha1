@@ -100,7 +100,7 @@ while abs(oldEnergy - properEnergy) > tolerance
     n = prefactor*n;
         
     %plot(radius,abs(gsWave)./radius')
-    plot(radius,u.^2 ./ radius.^2 ,'r',radius,4*pi*n,'b')
+    plot(radius,u.^2 ./ radius'.^2 ,'r',radius,4*pi*n,'b')
     drawnow
 end
 
