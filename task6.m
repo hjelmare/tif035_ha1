@@ -1,3 +1,6 @@
+%Exactly the same as task5 except new thing on line....
+
+%Samma som task4 fast med en extra term 
 clear all
 clc
 
@@ -7,8 +10,6 @@ task1
 % and clean up stuff we won't need
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
-
-hartreeToEV = 27.21;
 
 nPoints = 1000;
 rMin = 1e-10;
@@ -28,7 +29,7 @@ tolerance = 1e-3;
 oldEnergy = 1;
 gsEig = 2;
 
-while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
+while abs(oldEnergy - gsEig) > tolerance
     % Find Hartree potential (and Vxc) (task 2 + extension)
     
     % Relaxation
@@ -56,11 +57,23 @@ while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
         V_sH(ri) = -u(ri)/radius(ri) + 1/rMax;      % not sure about 2*
     end
 
+    %Calculates V_c (eq 22-24)
+    V_x = zeros(1,nPoints);
+    for ri = 1:nPoints
+    e_x = -3/4*(3*n(ri)/pi)^(1/3);
+    de_x = -3*n(ri)/(4*pi)*(pi/(3*n(ri)))^(2/3);
+    V_x(i) = e_x + de_x;
+    end
+    
+    %--------------------new from task5-------------------
+    V_c = GetV_c(n);
+    %-----------------------------------------------------
+    
     % Solve Kohn-Sham (task 3 + extension)
     H = zeros(nPoints);
     % Diagonal
     for i = 1:nPoints
-        H(i,i) = 1/stepWidth^2 - 2/radius(i) + V_sH(i);    % POTS GO HERE
+        H(i,i) = 1/stepWidth^2 - 2/radius(i) + V_sH(i) + V_x(i) + V_c;    % POTS GO HERE
     end
 
     % Sub- and superdiagonals
@@ -79,7 +92,8 @@ while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
     oldEnergy = gsEig;
     
     values = sum(values);
-    gsEig = min(values);
+    gsEig = sort(values);
+    gsEig = gsEig(1);
     gsIndex = find(values == gsEig);
     gsWave = vectors(:,gsIndex);
     
@@ -101,4 +115,3 @@ while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
 end
 
 disp('Done :/')
-hartreeToEV*gsEig
