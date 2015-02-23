@@ -20,9 +20,9 @@ for i = 2:nPoints
 end
 
 H(1,1) = 1;
-H(1,2) = -1e-5;
+H(1,2) = 0;
 H(end,end)=1;
-H(end,end-1)= -1e-5;
+H(end,end-1)= 0;
 
 [vectors, values] = eig(H);
 

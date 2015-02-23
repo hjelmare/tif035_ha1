@@ -58,13 +58,10 @@ while abs(oldEnergy - properEnergy) > tolerance
     
     %---------------------------Enda skillnaden från task4---------------
     %Calculates V_c (eq 22-24)
-    V_x = zeros(1,nPoints);
-    e_x = zeros(1,nPoints);
-    for ri = 1:nPoints
-        e_x(ri) = -3/4*(3*n(ri)/pi)^(1/3);
-        de_x = -(3/pi)^(1/3)/(4*n(ri)^(2/3));
-        V_x(ri) = e_x(ri) + n(ri)*de_x;
-    end
+    V_x = -(3.*n ./ pi).^(1/3);
+    
+    %V_x(1) = 0;
+    %V_x(end) = 0;
     %--------------------------------------------------------------------
     
     % Solve Kohn-Sham (task 3 + extension)
@@ -79,11 +76,11 @@ while abs(oldEnergy - properEnergy) > tolerance
         H(i,i-1) = -.5/stepWidth^2;
         H(i-1,i) = -.5/stepWidth^2;
     end
-    % TILLFÄLLIGT TILLAGDA MINUS ETT OCH SÅ
+    
     H(1,1) = 1;
-    H(1,2) = -0.00001;
+    H(1,2) = 0;
     H(end,end)=1;
-    H(end,end-1)=-0.00001;
+    H(end,end-1)=0;
     
     [vectors, values] = eig(H);
 
@@ -95,6 +92,8 @@ while abs(oldEnergy - properEnergy) > tolerance
     for ri = 1:nPoints
         n(ri) = gsWave(ri)^2;
     end
+    
+    e_x = -(3/4) * (3.*n./pi).^(1/3);
     
     oldEnergy = properEnergy;
     % Checking/debugging inf

@@ -70,9 +70,9 @@ while abs(oldEnergy - properEnergy) > tolerance
     end
     % MINUS ETTOR WAAAT
     H(1,1) = 1;
-    H(1,2) = -0.00001;
+    H(1,2) = 0;
     H(end,end)=1;
-    H(end,end-1)=-0.00001;
+    H(end,end-1)= 0;
     
     [vectors, values] = eig(H);
 
