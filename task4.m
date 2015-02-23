@@ -12,8 +12,8 @@ hartreeToEV = 27.21;
 
 nPoints = 1000;
 rMin = 1e-10;
-rMax = 50;
-a0 = 1;
+rMax = 5;
+
 
 stepWidth = (rMax-rMin) / (nPoints-1);
 
@@ -52,8 +52,7 @@ while abs(oldEnergy - properEnergy) > tolerance
     % Translating back to reality
     V_sH = zeros(1,nPoints);
     for ri = 1:nPoints
-        %V_sH(ri) = -2*u(ri)/radius(ri) + 1/rMax;   % THIS IS WHERE EXCHANGE HAPPENS??
-        V_sH(ri) = -u(ri)/radius(ri) + 1/rMax;      % not sure about 2*
+        V_sH(ri) = -u(ri)/radius(ri) + 1/rMax;
     end
 
     % Solve Kohn-Sham (task 3 + extension)
@@ -68,15 +67,13 @@ while abs(oldEnergy - properEnergy) > tolerance
         H(i,i-1) = -.5/stepWidth^2;
         H(i-1,i) = -.5/stepWidth^2;
     end
-    % MINUS ETTOR WAAAT
+    
     H(1,1) = 1;
     H(1,2) = 0;
     H(end,end)=1;
     H(end,end-1)= 0;
-    
-    [vectors, values] = eig(H);
 
-    
+    [vectors, values] = eig(H);
     
     values = sum(values);
     gsEig = min(values);
@@ -84,10 +81,11 @@ while abs(oldEnergy - properEnergy) > tolerance
     gsWave = vectors(:,gsIndex);
     
     for ri = 1:nPoints
-        n(ri) = gsWave(ri)^2;
+        n(ri) = gsWave(ri)^2 / (4*pi*radius(ri)^2);
     end
         
     oldEnergy = properEnergy;
+    
     % Checking/debugging inf
     disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
     norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
@@ -101,6 +99,7 @@ while abs(oldEnergy - properEnergy) > tolerance
         
     %plot(radius,abs(gsWave)./radius')
     plot(radius,u.^2 ./ radius'.^2 ,'r',radius,4*pi*n,'b')
+    legend('u-kvad / r-kvad', '4 \pi n')
     drawnow
 end
 
