@@ -26,9 +26,9 @@ end
 
 tolerance = 1e-3;
 oldEnergy = 1;
-gsEig = 2;
+properEnergy = 2;
 
-while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
+while abs(oldEnergy - properEnergy) > tolerance
     % Find Hartree potential (and Vxc) (task 2 + extension)
     
     % Relaxation
@@ -76,7 +76,7 @@ while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
     
     [vectors, values] = eig(H);
 
-    oldEnergy = gsEig;
+    
     
     values = sum(values);
     gsEig = min(values);
@@ -86,11 +86,14 @@ while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
     for ri = 1:nPoints
         n(ri) = gsWave(ri)^2;
     end
+    
+    oldEnergy = properEnergy;
     % Checking/debugging inf
-    disp('   Norm check         | energy             | peak of wf         | proper energy')
+    disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
     norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
     peak = max(abs(gsWave));
-    disp([norm, gsEig, peak])
+    properEnergy = 2*gsEig - trapz(V_sH'.*u.^2)*stepWidth;
+    disp([norm, gsEig, peak, properEnergy])
     
     % Normalization - NOT SURE THIS IS VERY CLEVERLY DONE RIGHT NOW
     prefactor = 1/norm;
@@ -100,5 +103,5 @@ while hartreeToEV*abs(oldEnergy - gsEig) > tolerance
     drawnow
 end
 
-disp('Done :/')
-hartreeToEV*gsEig
+disp('Final energy')
+disp(properEnergy)
