@@ -10,7 +10,7 @@ clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
 hartreeToEV = 27.21;
 
-nPoints = 1000;
+nPoints = 2000;
 rMin = 1e-10;
 rMax = 5;
 a0 = 1;

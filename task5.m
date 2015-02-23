@@ -62,7 +62,7 @@ while abs(oldEnergy - properEnergy) > tolerance
     e_x = zeros(1,nPoints);
     for ri = 1:nPoints
         e_x(ri) = -3/4*(3*n(ri)/pi)^(1/3);
-        de_x = -3/(4*pi)*(pi/(3*n(ri)))^(2/3);
+        de_x = -(3/pi)^(1/3)/(4*n(ri)^(2/3));
         V_x(ri) = e_x(ri) + n(ri)*de_x;
     end
     %--------------------------------------------------------------------
