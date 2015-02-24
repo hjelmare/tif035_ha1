@@ -12,7 +12,7 @@ clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
 rMaxes = [5:15];
 %stepWidths = [0.05 0.01 0.005 0.004 0.0035 0.003 0.0025];
-stepWidths = [0.004 0.0035 0.003 0.0025];
+stepWidths = [0.005 0.004 0.0035 0.003 0.0025 0.002];
 
 for outerIterations = 1:length(stepWidths)
 
@@ -23,7 +23,7 @@ for outerIterations = 1:length(stepWidths)
     stepWidth = stepWidths(outerIterations);
     nPoints = (rMax-rMin)/stepWidth + 1;
     nPoints = round(nPoints);
-
+    
     radius = linspace(rMin,rMax,nPoints);
 
     n = zeros(1,nPoints);
