@@ -12,12 +12,13 @@ clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
 hartreeToEV = 27.21;
 
-nPoints = 1000;
+stepWidth = 5e-3;
 rMin = 1e-10;
-rMax = 5;
+rMax = 12;
 
 
-stepWidth = (rMax-rMin) / (nPoints-1);
+nPoints = (rMax-rMin) / stepWidth + 1;
+nPoints = round(nPoints)
 
 radius = linspace(rMin,rMax,nPoints);
 
@@ -26,7 +27,7 @@ for ri = 1:nPoints
     n(ri) = phi(radius(ri))^2;
 end
 
-tolerance = 1e-4;
+tolerance = 1e-6;
 oldEnergy = 1;
 properEnergy = 2;
 
@@ -34,27 +35,27 @@ while abs(oldEnergy - properEnergy) > tolerance
     % Find Hartree potential (and Vxc) (task 2 + extension)
     
     % Relaxation
-    U = zeros(nPoints);
-    u = zeros(nPoints,1);
+    operatorU = zeros(nPoints);
+    U = zeros(nPoints,1);
     
     for i = 1:nPoints
-        U(i,i) = -2;
+        operatorU(i,i) = -2;
     end
     for i = 2:nPoints
-        U(i-1,i) = 1;
-        U(i,i-1) = 1;
+        operatorU(i-1,i) = 1;
+        operatorU(i,i-1) = 1;
     end
     % FUCKING MAGIC, HOW DOES THIS WORK? ;)
-    U(1,1) = 1;
-    U(1,2) = 0;
-    U(end,end) = 1;
-    U(end,end-1) = 0;
-    u = U\(4*pi*radius.*n.*stepWidth^2)';
+    operatorU(1,1) = 1;
+    operatorU(1,2) = 0;
+    operatorU(end:end) = 1;
+    operatorU(end:end-1) = 0;
+    U = operatorU\(4*pi*radius.*n.*stepWidth^2)';
     
     % Translating back to reality
     V_sH = zeros(1,nPoints);
     for ri = 1:nPoints
-        V_sH(ri) = -u(ri)/radius(ri) + 1/rMax;
+        V_sH(ri) = -U(ri)/radius(ri) + 1/rMax;
     end
 
     % Solve Kohn-Sham (task 3 + extension)
@@ -91,24 +92,16 @@ while abs(oldEnergy - properEnergy) > tolerance
     % Checking/debugging inf
     disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
     norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
-    peak = max(abs(gsWave));
-    properEnergy = 2*gsEig - trapz(V_sH'.*u.^2)*stepWidth;
-    disp([norm, gsEig, peak, properEnergy])
-        
-    % Normalization
     prefactor = 1/norm;
     n = prefactor*n;
-    
-    
+    peak = max(abs(gsWave));
+    properEnergy = 2*gsEig - trapz(V_sH'.*(sqrt(4*pi*n').*radius').^2)*stepWidth;
+    disp([norm, gsEig, peak, properEnergy])
         
-    %plot(radius,abs(gsWave)./radius')
-    plot(radius,u.^2 ./ radius'.^2 ,'r',radius,4*pi*n,'b')
-    legend('u-kvad / r-kvad', '4 \pi n')
+    plot(radius,abs(gsWave)./radius')
     drawnow
 end
-finalEnergy = properEnergy;
+properEnergy = 2*gsEig - trapz(V_sH'.*(sqrt(4*pi*n').*radius').^2)*stepWidth;
+
 disp('Final energy')
 disp(properEnergy)
-
-disp(stepWidth*[trapz(V_sH), trapz(u.^2)])
-
