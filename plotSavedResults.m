@@ -27,11 +27,11 @@ clear 'u'
 load('radius.mat')
 
 hold on
-plot(radius, u4, '*')
-plot(radius, u5, 'rx')
-plot(radius, u6, 'go')
+plot(radius, u4, 'k:')
+plot(radius, u5, 'r')
+plot(radius, u6, 'b-.')
 
 xlabel('radius [au]', 'FontSize', 14)
-ylabel('\psi(r)', 'FontSize', 14)
+ylabel('u(r)', 'FontSize', 14)
 legend('task4', 'task5', 'task6')
 

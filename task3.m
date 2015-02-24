@@ -1,10 +1,11 @@
 clear all
 clc
+close all
 
 rMin = 1e-10;
-rMax = 5;
+rMax = 8;
 
-nPoints = 1000;
+nPoints = 2000;
 radius = linspace(rMin,rMax,nPoints);
 stepWidth = (rMax-rMin)/(nPoints-1);
 
@@ -31,7 +32,27 @@ values = sum(values);
 gsEig = min(values);
 gsIndex = find(values == gsEig);
 gsWave = vectors(:,gsIndex);
+%%
 
-plot(radius, abs(gsWave)./(sqrt(4*pi)*radius'))
+HydrogenWaveFunc = @(r) r*exp(-r); %Den radiella vågfunk. för väte
+u_H = zeros(1,length(radius));
+for i = 1:length(radius)
+    u_H(i) = HydrogenWaveFunc(radius(i));
+end
+
+%Normalization
+u_H = u_H/sqrt(trapz(radius, u_H.^2));
+gsWave = gsWave/sqrt(trapz(radius, gsWave.^2));
+
+hold on
+plot(radius, gsWave, 'o')
+plot(radius, u_H, 'rd', 'MarkerSize', 2)
+xlabel('radius [au]', 'FontSize', 14)
+ylabel('u(r) [au]', 'FontSize', 14)
+text = legend('Result from simulation', 'Analytically calculated');
+set(text, 'FontSize', 12)
+
 disp('Ground state energy [eV]')
 disp(gsEig*27.21)
+
+
