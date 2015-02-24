@@ -10,10 +10,11 @@ task1
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
-rMaxes = [5:15]
-stepWidths = [0.05 0.01 0.005 0.004 0.003];
+rMaxes = [5:15];
+%stepWidths = [0.05 0.01 0.005 0.004 0.0035 0.003 0.0025];
+stepWidths = [0.004 0.0035 0.003 0.0025];
 
-for outerIterations = 1:length(rMaxes)+1
+for outerIterations = 1:length(stepWidths)
 
     rMin = 1e-10;
     %stepWidth = 0.05;
