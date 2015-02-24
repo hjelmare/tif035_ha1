@@ -95,10 +95,16 @@ for ri = 1:nPoints
     y(ri) = phi(radius(ri))^2;
 end
 
-plot(radius, y)
-xlabel('Radius [Å]','FontSize',14)
+norm = trapz(y)*rMax/(nPoints-1);
+
+phiValues = zeros(1,nPoints);
+for ri = 1:nPoints
+    phiValues(ri) = (1/sqrt(norm))*phi(radius(ri));
+end
+
+plot(radius, phiValues)
+xlabel('Radius [au]','FontSize',14)
 ylabel('\psi(r)','FontSize',14)
 %saveas(gcf,'task1.png','png')
-
 
 save('helium_coefficient.mat','C')
