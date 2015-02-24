@@ -11,8 +11,8 @@ clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
 rMin = 1e-10;
-rMax = 12;
-stepWidth = 0.001
+rMax = 6;
+stepWidth = 0.001;
 nPoints = (rMax-rMin)/stepWidth + 1;
 nPoints = round(nPoints)
 
