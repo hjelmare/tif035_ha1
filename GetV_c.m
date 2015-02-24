@@ -57,6 +57,8 @@ for i = 1:width
         V_c(i) = e_c(i) + density(i)*de_c; 
     end
 end
+V_c(1) = 0;
+V_c(end) = 0;
 
 end
 

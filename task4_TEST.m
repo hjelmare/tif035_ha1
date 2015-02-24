@@ -12,8 +12,6 @@ clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
 rMaxes = [3:0.2:10];
 
-outerIterations = 1
-
 for outerIterations = 1:length(rMaxes)
 
     rMin = 1e-10;
@@ -69,22 +67,21 @@ for outerIterations = 1:length(rMaxes)
 
         oldEnergy = properEnergy;
         % Checking/debugging inf
-        disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
+        %disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
         %norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
         peak = max(abs(gsWave));
         properEnergy = 2*gsEig - trapz(V_sH.*u.^2)*stepWidth;
-        disp([0000, gsEig, peak, properEnergy])
+        %disp([0000, gsEig, peak, properEnergy])
 
     end
     finalEnergy = properEnergy;
-    disp('Final energy')
-    disp(properEnergy)
+    %disp('Final energy')
+    %disp(properEnergy)
     
     plotEnergy(outerIterations) = properEnergy;
     
     
 end
-%%
 
 % % Plot for rMax sweep
 plot(rMaxes,plotEnergy)
