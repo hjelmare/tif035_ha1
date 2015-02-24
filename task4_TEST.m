@@ -10,10 +10,11 @@ task1
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
-nPoints = 1000;
 rMin = 1e-10;
-rMax = 5;
-stepWidth = (rMax-rMin) / (nPoints-1);
+rMax = 12;
+stepWidth = 0.001
+nPoints = (rMax-rMin)/stepWidth + 1;
+nPoints = round(nPoints)
 
 radius = linspace(rMin,rMax,nPoints);
 
@@ -31,6 +32,7 @@ properEnergy = 2;
 
 while abs(oldEnergy - properEnergy) > tolerance
     V_sH = GetV_sH(u, radius);
+    %V_sH = solveVSH(radius, u);
 
     % Solve Kohn-Sham (task 3 + extension)
     H = zeros(nPoints);

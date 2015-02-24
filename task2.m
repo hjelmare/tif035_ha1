@@ -64,10 +64,11 @@ end
 
 % Plotting
 hold on
-plot(radius,V,'x')
+plot(radius(1:10:end),V(1:10:end),'x')
 plot(radius,V_hartree, 'r')
-plot(radius,n,'k')
+%plot(radius,n,'k')
 hold off
-legend('Calculated potential', 'Hartree potential', 'Density')
+legend('Calculated potential using uniform grid', 'Analytically calculated', 'Density')
 xlabel('Radius [Å]','FontSize',14)
+ylabel('Hartree potential [au]', 'FontSize', 14)
 %saveas(gcf,'task2_hydrogen.png','png')
