@@ -10,29 +10,16 @@ task1
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
+rMaxes = [3:0.2:10];
 
-%rMin = 1e-10;
-%rMax = 6;
-%stepWidth = 0.001;
-%nPoints = (rMax-rMin)/stepWidth + 1;
-%nPoints = round(nPoints)
-
-%rMaxes = [5:15];
-%stepWidths = [0.1 0.05 0.04 0.02 0.01 0.005 0.004 0.003 0.001 0.0005];
-stepWidths = 0.004;
-
-
-
-for outerIterations = 1:length(stepWidths)
+for outerIterations = 1:length(rMaxes)
 
     rMin = 1e-10;
-    %stepWidth = 0.05;
-    rMax = 8;
-    %rMax = rMaxes(outerIterations);
-    stepWidth = stepWidths(outerIterations);
+    stepWidth = 0.05;
+    rMax = rMaxes(outerIterations);
     nPoints = (rMax-rMin)/stepWidth + 1;
-    nPoints = round(nPoints)
-
+    nPoints = round(nPoints);
+ 
     radius = linspace(rMin,rMax,nPoints);
 
     n = zeros(1,nPoints);

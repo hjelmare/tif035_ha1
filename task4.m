@@ -78,7 +78,7 @@ while abs(oldEnergy - properEnergy) > tolerance
 
     [vectors, values] = eig(H);
     
-    values = sum(values);
+    values = diag(values);
     gsEig = min(values);
     gsIndex = find(values == gsEig);
     gsWave = vectors(:,gsIndex);
