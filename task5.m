@@ -4,8 +4,6 @@ clc
 % Make initial guess at wave function (task 1)
 task1
 
-
-
 % and clean up stuff we won't need
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
@@ -33,18 +31,16 @@ properEnergy = 2;
 while abs(oldEnergy - properEnergy) > tolerance
     V_sH = GetV_sH(u, radius);
     
-    %---------------------------Enda skillnaden från task4---------------
-    %Calculates V_c (eq 22-24)
+    % Calculates V_x (eq 22-24)
     n = 2*((u./radius).^2/(4*pi));
     V_x = -(3.*n ./ pi).^(1/3);
     e_x = -3/4*(3*n/pi).^(1/3);
-    %--------------------------------------------------------------------
     
     % Solve Kohn-Sham (task 4 + extension)
     H = zeros(nPoints);
     % Diagonal
     for i = 1:nPoints
-        H(i,i) = 1/stepWidth^2 - 2/radius(i) + 2*V_sH(i) + V_x(i);    % POTS GO HERE
+        H(i,i) = 1/stepWidth^2 - 2/radius(i) + 2*V_sH(i) + V_x(i);
     end
 
     % Sub- and superdiagonals
@@ -69,11 +65,10 @@ while abs(oldEnergy - properEnergy) > tolerance
         
     oldEnergy = properEnergy;
     % Checking/debugging inf
-    disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
-    %norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
+    disp('   eigenvalue         | peak of wf       | proper energy')
     peak = max(abs(gsWave));
     properEnergy = 2*gsEig - 2*trapz((0.5*2*V_sH + V_x - e_x).*u.^2)*stepWidth;
-    disp([0000, gsEig, peak, properEnergy])
+    disp([gsEig, peak, properEnergy])
  
         
 %     %plot(radius,abs(gsWave)./radius')

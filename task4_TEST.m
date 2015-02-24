@@ -4,12 +4,11 @@ clc
 % Make initial guess at wave function (task 1)
 task1
 
-
-
 % and clean up stuff we won't need
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
+% Convergence testing stuff
 rMaxes = [3:0.2:10];
 
 for outerIterations = 1:length(rMaxes)
@@ -21,17 +20,17 @@ for outerIterations = 1:length(rMaxes)
     nPoints = round(nPoints);
  
     radius = linspace(rMin,rMax,nPoints);
-
+    % Get density from guesstimated wave function
     n = zeros(1,nPoints);
     for ri = 1:nPoints
         n(ri) = phi(radius(ri))^2;
     end
-
+    % and then find u from the density
     u = sqrt(4*pi*n).*radius;
     u = u/sqrt(trapz(radius, u.^2));
 
-    tolerance = 1e-5;
-    oldEnergy = 1;
+    tolerance = 1e-5;   % Termination criterion
+    oldEnergy = 1;      % Just some energies to get the loop started
     properEnergy = 2;
 
     while abs(oldEnergy - properEnergy) > tolerance
@@ -41,7 +40,7 @@ for outerIterations = 1:length(rMaxes)
         H = zeros(nPoints);
         % Diagonal
         for i = 1:nPoints
-            H(i,i) = 1/stepWidth^2 - 2/radius(i) + V_sH(i);    % POTS GO HERE
+            H(i,i) = 1/stepWidth^2 - 2/radius(i) + V_sH(i); % add pots here
         end
 
         % Sub- and superdiagonals
@@ -50,13 +49,16 @@ for outerIterations = 1:length(rMaxes)
             H(i,i-1) = b;
             H(i-1,i) = b;
         end
+        % Boundary conditions
         H(1,1) = 1;
         H(1,2) = 0;
         H(end,end)=1;
         H(end,end-1)=0;
-
+        
+        % Solve eigenproblem
         [vectors, values] = eig(H);
-
+        
+        %Get ground state
         values = diag(values);
         gsEig = min(values);
         gsIndex = find(values == gsEig);
@@ -67,11 +69,10 @@ for outerIterations = 1:length(rMaxes)
 
         oldEnergy = properEnergy;
         % Checking/debugging inf
-        disp('   Norm check         | eigenvalue         | peak of wf       | proper energy')
-        %norm = 4*pi*trapz(n.*radius.*radius)*stepWidth;
+        disp('   eigenvalue         | peak of wf       | proper energy')
         peak = max(abs(gsWave));
         properEnergy = 2*gsEig - trapz(V_sH.*u.^2)*stepWidth;
-        disp([0000, gsEig, peak, properEnergy])
+        disp([gsEig, peak, properEnergy])
 
     end
     finalEnergy = properEnergy;
@@ -81,6 +82,7 @@ for outerIterations = 1:length(rMaxes)
     %plotEnergy(outerIterations) = properEnergy;
 
 end
+
 %save('task4_EnergyOver_stepWidth.m', 'plotEnergy')
 %save('stepWidth.m', 'stepWidths')
 % % Plot for rMax sweep

@@ -17,16 +17,6 @@ for ri = 1:nPoints
     n(ri) = exp(-2*radius(ri))/pi;
 end
 
-% % Electron density - helium
-% load('helium_coefficient.mat')
-% a = [0.297104, 1.236745, 5.749982, 38.216677];
-% chi = @(rad) [exp(-a(1)*rad^2), exp(-a(2)*rad^2), exp(-a(3)*rad^2), exp(-a(4)*rad^2) ];
-% phi = @(rad) chi(rad)*C;
-% n = zeros(1,nPoints);
-% for ri = 1:nPoints
-%     n(ri) = phi(radius(ri))^2;
-% end
-
 disp('Checking normalization - should be 1')
 4*pi*trapz(n.*radius.*radius)*stepWidth
 
@@ -41,13 +31,12 @@ for i = 2:nPoints
     U(i-1,i) = 1;
     U(i,i-1) = 1;
 end
-% FUCKING MAGIC, HOW DOES THIS WORK? ;)
+% Boundary conditions
 U(1,1) = 1;
 U(1,2) = 0;
 U(end:end) = 1;
 U(end:end-1) = 0;
 u = U\(4*pi*radius.*n.*stepWidth^2)';
-a=trapz(u.^2)*stepWidth
 
 % Translating back to reality
 V = zeros(1,nPoints);
@@ -61,12 +50,10 @@ for ri = 1:nPoints
     V_hartree(ri) = (1/radius(ri)) - (1 + (1/radius(ri)))*exp(-2*radius(ri));
 end
 
-
 % Plotting
 hold on
 plot(radius(1:10:end),V(1:10:end),'x')
 plot(radius,V_hartree, 'r')
-%plot(radius,n,'k')
 hold off
 legend('Calculated potential using uniform grid', 'Analytically calculated', 'Density')
 xlabel('Radius [Å]','FontSize',14)

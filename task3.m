@@ -21,20 +21,21 @@ for i = 2:nPoints
     H(i-1,i) = -.5/stepWidth^2;
 end
 
+% Boundary conditions
 H(1,1) = 1;
 H(1,2) = 0;
 H(end,end)=1;
 H(end,end-1)=0;
 
+% Solve eigenproblem
 [vectors, values] = eig(H);
 
 values = sum(values);
 gsEig = min(values);
 gsIndex = find(values == gsEig);
 gsWave = vectors(:,gsIndex);
-%%
 
-HydrogenWaveFunc = @(r) r*exp(-r); %Den radiella vågfunk. för väte
+HydrogenWaveFunc = @(r) r*exp(-r); % Analytic result from course book
 u_H = zeros(1,length(radius));
 for i = 1:length(radius)
     u_H(i) = HydrogenWaveFunc(radius(i));
