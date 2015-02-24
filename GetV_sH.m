@@ -6,12 +6,14 @@ rMax = r(end);
 h = r(3)-r(2);
 
 U = zeros(nPoints);
+a = -2/(h^2);
+b = 1/(h^2);
 for i = 1:nPoints
-    U(i,i) = -2/(h^2);
+    U(i,i) = a;
 end
 for i = 2:nPoints
-    U(i-1,i) = 1/(h^2);
-    U(i,i-1) = 1/(h^2);
+    U(i-1,i) = b;
+    U(i,i-1) = b;
 end
 
 U(1,1) = 1;
