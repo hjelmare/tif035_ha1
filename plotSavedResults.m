@@ -29,23 +29,28 @@ u6 = u;
 clear 'u'
 load('radius.mat')
 
+u1 = sqrt(4*pi).*radius1.*phi1;
+norm = sqrt(trapz(radius1, u1.^2));
+u1 = (1/norm).*u1;
 
-
-phi4 = u4./(sqrt(4*pi)*radius);
-phi5 = u5./(sqrt(4*pi)*radius);
-phi6 = u6./(sqrt(4*pi)*radius);
-
+%phi4 = u4./(sqrt(4*pi)*radius);
+%phi5 = u5./(sqrt(4*pi)*radius);
+%phi6 = u6./(sqrt(4*pi)*radius);
+%%
+close all
 hold on
-plot(radius1, phi1, 'g')
-plot(radius, phi4, 'k:')
-plot(radius, phi5, 'r')
-plot(radius, phi6, 'b-.')
+%plot(radius1, phi1, 'g')
+%plot(radius, phi4, 'k:')
+%plot(radius, phi5, 'r')
+%plot(radius, phi6, 'b-.')
 
-%plot(radius, u4, 'k:') %The radial wave functions (without task 1)
-%plot(radius, u5, 'r')
-%plot(radius, u6, 'b-.')
+plot(radius1, u1, 'g--')
+plot(radius, u4, 'k:')
+plot(radius, u5, 'r', 'MarkerSize', 2)
+plot(radius, u6, 'b-.')
 
 xlabel('radius [au]', 'FontSize', 14)
-ylabel('u(r)', 'FontSize', 14)
+ylabel('u(r) [au]', 'FontSize', 14)
 legend('task1', 'task4', 'task5', 'task6')
+xlim([0 6])
 

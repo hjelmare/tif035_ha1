@@ -109,10 +109,3 @@ ylabel('\psi(r)','FontSize',14)
 
 save('helium_coefficient.mat','C')
 
-
-%%
-
-u = sqrt(4*pi).*radius.*phiValues;
-norm = sqrt(trapz(radius, u.^2))
-u = (1/norm).*u;
-plot(u)
