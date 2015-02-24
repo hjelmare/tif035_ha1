@@ -2,7 +2,8 @@ clear all
 clc
 
 rMin = 1e-10;
-rMax = 15;
+rMax = 5;
+
 nPoints = 1000;
 radius = linspace(rMin,rMax,nPoints);
 stepWidth = (rMax-rMin)/(nPoints-1);
@@ -22,7 +23,7 @@ end
 H(1,1) = 1;
 H(1,2) = 0;
 H(end,end)=1;
-H(end,end-1)= 0;
+H(end,end-1)=0;
 
 [vectors, values] = eig(H);
 
