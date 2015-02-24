@@ -10,20 +10,18 @@ task1
 clear C F Q S eigValues eigVectors energyChange h i index j oldEnergy
 clear p q r s temp pifactor prefactor nPoints rMax radius ri y
 
-rMaxes = [5:15];
-%stepWidths = [0.05 0.01 0.005 0.004 0.0035 0.003 0.0025];
-stepWidths = [0.005 0.004 0.0035 0.003 0.0025 0.002];
+rMaxes = [3:0.2:10];
 
-for outerIterations = 1:length(stepWidths)
+outerIterations = 1
+
+for outerIterations = 1:length(rMaxes)
 
     rMin = 1e-10;
-    %stepWidth = 0.05;
-    rMax = 10;
-    %rMax = rMaxes(outerIterations);
-    stepWidth = stepWidths(outerIterations);
+    stepWidth = 0.05;
+    rMax = rMaxes(outerIterations);
     nPoints = (rMax-rMin)/stepWidth + 1;
     nPoints = round(nPoints);
-    
+ 
     radius = linspace(rMin,rMax,nPoints);
 
     n = zeros(1,nPoints);
@@ -83,16 +81,15 @@ for outerIterations = 1:length(stepWidths)
     disp(properEnergy)
     
     plotEnergy(outerIterations) = properEnergy;
-
+    
+    
 end
+%%
+
 % % Plot for rMax sweep
-%plot(rMaxes,plotEnergy)
-%axis([5 15 -2.8535 -2.8531])
-%xlabel('rMax [au]','FontSize',14)
-
-% Plot for stepWidth sweep
-plot(stepWidths,plotEnergy)
-xlabel('stepWidth [au]','FontSize',14)
-
-
+plot(rMaxes,plotEnergy)
+axis([4 10 -2.8535 -2.852])
+xlabel('rMax [au]','FontSize',14)
 ylabel('Energy [au]','FontSize',14)
+
+saveas(gcf,'convergence_rmax.png','png')
